@@ -5,6 +5,7 @@ import os
 import queue
 import shutil
 import subprocess
+import sys
 import threading
 import time
 from dataclasses import dataclass
@@ -44,6 +45,17 @@ def _find_codex() -> str:
         candidate = Path(local_app_data) / "OpenAI" / "Codex" / "bin" / "codex.exe"
         if candidate.is_file():
             return str(candidate)
+
+    if sys.platform == "darwin":
+        mac_candidates = (
+            Path("/Applications/ChatGPT.app/Contents/Resources/codex"),
+            Path.home() / "Applications/ChatGPT.app/Contents/Resources/codex",
+            Path("/Applications/Codex.app/Contents/Resources/codex"),
+            Path.home() / "Applications/Codex.app/Contents/Resources/codex",
+        )
+        for candidate in mac_candidates:
+            if candidate.is_file():
+                return str(candidate)
 
     raise CodexUsageError("没找到 Codex。先确认 Codex 桌面端已经安装并登录。")
 

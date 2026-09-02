@@ -65,13 +65,21 @@ MOVIE_PATHS = {
     "crawl": ASSET_DIR / "crawl.gif",
 }
 
-_FONT_FILES = (
-    Path("C:/Windows/Fonts/msyh.ttc"),
-    Path("C:/Windows/Fonts/msyhbd.ttc"),
-    Path("C:/Windows/Fonts/simhei.ttf"),
-)
+if sys.platform == "darwin":
+    _FONT_FILES = (
+        Path("/System/Library/Fonts/PingFang.ttc"),
+        Path("/System/Library/Fonts/STHeiti Light.ttc"),
+        Path("/System/Library/Fonts/STHeiti Medium.ttc"),
+    )
+    _CJK_FONT_FAMILY = "PingFang SC"
+else:
+    _FONT_FILES = (
+        Path("C:/Windows/Fonts/msyh.ttc"),
+        Path("C:/Windows/Fonts/msyhbd.ttc"),
+        Path("C:/Windows/Fonts/simhei.ttf"),
+    )
+    _CJK_FONT_FAMILY = "Microsoft YaHei"
 _FONTS_REGISTERED = False
-_CJK_FONT_FAMILY = "Microsoft YaHei"
 
 
 def _register_chinese_fonts() -> None:
@@ -652,6 +660,10 @@ class MaodiePet(QWidget):
         if self._always_on_top:
             flags |= Qt.WindowType.WindowStaysOnTopHint
         self.setWindowFlags(flags)
+        if sys.platform == "darwin" and hasattr(
+            Qt.WidgetAttribute, "WA_MacAlwaysShowToolWindow"
+        ):
+            self.setAttribute(Qt.WidgetAttribute.WA_MacAlwaysShowToolWindow, True)
 
     def _load_idle_pixmap(self) -> tuple[QPixmap, bool]:
         """Load the completed sprite, then fall back without crashing."""
@@ -1405,8 +1417,13 @@ def main() -> int:
     )
     app = QApplication(sys.argv)
     app.setApplicationName("圆头耄耋桌宠")
+    app.setApplicationDisplayName("圆头耄耋")
     app.setOrganizationName("MaodiePet")
     app.setQuitOnLastWindowClosed(False)
+
+    icon_path = next((path for path in IDLE_PATHS if path.is_file()), None)
+    if icon_path is not None:
+        app.setWindowIcon(QIcon(str(icon_path)))
 
     pet = MaodiePet()
     pet.start()

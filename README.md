@@ -1,6 +1,6 @@
 # 圆头耄耋桌宠 MVP
 
-一只透明、置顶、会乱动，还会对你阴阳怪气的 Windows 桌宠。它很小，脾气倒是不小。😼
+一只透明、置顶、会乱动，还会对你阴阳怪气的 Windows/macOS 桌宠。它很小，脾气倒是不小。😼
 
 ## 已实现
 
@@ -20,8 +20,8 @@
 
 ## 运行环境
 
-- Windows 10/11
-- Python 3.10 或更新版本
+- Windows 10/11 或 macOS 12 及更新版本
+- Python 3.9 或更新版本
 - “老吴查账”为可选功能，需要本机安装并登录 Codex 桌面端
 
 ## 首次安装
@@ -51,6 +51,26 @@ python -m pip install -r requirements.txt
 ```powershell
 python app.py
 ```
+
+### macOS
+
+在 Finder 中双击 `run-macos.command`。第一次运行会自动创建 `.venv` 并安装依赖，之后直接启动桌宠。
+
+也可以在终端运行：
+
+```bash
+chmod +x run-macos.command build-macos.command
+./run-macos.command
+```
+
+需要生成可双击的独立应用时运行：
+
+```bash
+./build-macos.command
+open "dist/圆头耄耋.app"
+```
+
+生成结果位于 `dist/圆头耄耋.app`。首次打开若被 Gatekeeper 阻止，请在 Finder 中右键应用并选择“打开”。
 
 ## 角色素材
 
